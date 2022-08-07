@@ -24,8 +24,8 @@ func GetPersonalities(w http.ResponseWriter, r *http.Request) {
 func GetPersonalityById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-
 	var personality models.Personality
+
 	database.DB.First(&personality, id)
 	json.NewEncoder(w).Encode(personality)
 }
@@ -42,8 +42,20 @@ func CreatePersonality(w http.ResponseWriter, r *http.Request) {
 func DeletePersonality(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-
 	var personality models.Personality
+
 	database.DB.Delete(&personality, id)
 	json.NewEncoder(w).Encode("Personality deleted")
+}
+
+// UpdatePersonality todo: remove access to database this and put in a repository, for example
+func UpdatePersonality(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	id := vars["id"]
+	var personality models.Personality
+
+	database.DB.First(&personality, id)
+	json.NewDecoder(r.Body).Decode(&personality)
+	database.DB.Save(&personality)
+	json.NewEncoder(w).Encode(&personality)
 }
