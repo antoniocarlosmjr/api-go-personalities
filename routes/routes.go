@@ -3,6 +3,7 @@ package routes
 import (
 	"github.com/antoniocarlosmjr/api-go-personalities/controllers"
 	"github.com/antoniocarlosmjr/api-go-personalities/middleware"
+	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
@@ -19,5 +20,5 @@ func HandleRequest() {
 	route.HandleFunc("/api/personalities/{id}", controllers.DeletePersonality).Methods("DELETE")
 	route.HandleFunc("/api/personalities/{id}", controllers.UpdatePersonality).Methods("PUT")
 
-	log.Fatal(http.ListenAndServe(":8000", route))
+	log.Fatal(http.ListenAndServe(":8000", handlers.CORS(handlers.AllowedOrigins([]string{"*"}))(route)))
 }
