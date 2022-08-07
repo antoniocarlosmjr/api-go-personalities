@@ -8,8 +8,8 @@ import (
 
 func main() {
 	models.Personalities = []models.Personality{
-		{Name: "Tobias Barreto", Story: "He was a philosopher, poet, critic, etc..."},
-		{Name: "Silvio Romero", Story: "He was a lawyer, literature critic, journalist, etc..."},
+		{Id: 1, Name: "Tobias Barreto", Story: "He was a philosopher, poet, critic, etc..."},
+		{Id: 2, Name: "Silvio Romero", Story: "He was a lawyer, literature critic, journalist, etc..."},
 	}
 	fmt.Println("Initing server....")
 	routes.HandleRequest()
