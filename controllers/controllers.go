@@ -3,10 +3,10 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/antoniocarlosmjr/api-go-personalities/database"
 	"github.com/antoniocarlosmjr/api-go-personalities/models"
 	"github.com/gorilla/mux"
 	"net/http"
-	"strconv"
 )
 
 func Home(w http.ResponseWriter, r *http.Request) {
@@ -14,16 +14,15 @@ func Home(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetPersonalities(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(models.Personalities)
+	var personalities []models.Personality
+	database.DB.Find(&personalities)
+	json.NewEncoder(w).Encode(personalities)
 }
 
 func GetPersonalityById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-
-	for _, personality := range models.Personalities {
-		if strconv.Itoa(personality.Id) == id {
-			json.NewEncoder(w).Encode(personality)
-		}
-	}
+	var personality models.Personality
+	database.DB.First(&personality, id)
+	json.NewEncoder(w).Encode(personality)
 }
