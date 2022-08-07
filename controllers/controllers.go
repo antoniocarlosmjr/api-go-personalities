@@ -32,6 +32,7 @@ func GetPersonalityById(w http.ResponseWriter, r *http.Request) {
 
 // CreatePersonality todo: remove access to database this and put in a repository, for example
 func CreatePersonality(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusCreated)
 	var newPersonality models.Personality
 	json.NewDecoder(r.Body).Decode(&newPersonality)
 	database.DB.Create(&newPersonality)
