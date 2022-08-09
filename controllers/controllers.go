@@ -21,7 +21,12 @@ func GetPersonalities(w http.ResponseWriter, r *http.Request) {
 func GetPersonalityById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	personality := services.GetPersonalityById(id)
+	personality, err := services.GetPersonalityById(id)
+	if err != nil {
+		w.WriteHeader(http.StatusNotFound)
+		json.NewEncoder(w).Encode(err.Error())
+		return
+	}
 	json.NewEncoder(w).Encode(personality)
 }
 
@@ -45,7 +50,7 @@ func UpdatePersonality(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	var personality models.Personality
-	personality = services.GetPersonalityById(id)
+	personality, _ = services.GetPersonalityById(id)
 	json.NewDecoder(r.Body).Decode(&personality)
 
 	personality = services.UpdatePersonality(personality)

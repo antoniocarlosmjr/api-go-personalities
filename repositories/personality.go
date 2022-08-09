@@ -1,6 +1,7 @@
 package repositories
 
 import (
+	"errors"
 	"github.com/antoniocarlosmjr/api-go-personalities/database"
 	"github.com/antoniocarlosmjr/api-go-personalities/models"
 )
@@ -11,10 +12,13 @@ func GetAllPersonalities() []models.Personality {
 	return personalities
 }
 
-func GetPersonalityById(id string) models.Personality {
+func GetPersonalityById(id string) (models.Personality, error) {
 	var personality models.Personality
-	database.DB.First(&personality, id)
-	return personality
+	err := database.DB.First(&personality, id).Error
+	if err != nil {
+		return models.Personality{}, errors.New("personality not found")
+	}
+	return personality, nil
 }
 
 func CreatePersonality(newPersonality models.Personality) models.Personality {

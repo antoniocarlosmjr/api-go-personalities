@@ -9,7 +9,7 @@ func GetAllPersonalities() []models.Personality {
 	return repositories.GetAllPersonalities()
 }
 
-func GetPersonalityById(id string) models.Personality {
+func GetPersonalityById(id string) (models.Personality, error) {
 	return repositories.GetPersonalityById(id)
 }
 
