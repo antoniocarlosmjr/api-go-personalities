@@ -3,8 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/antoniocarlosmjr/api-go-personalities/database"
 	"github.com/antoniocarlosmjr/api-go-personalities/models"
+	"github.com/antoniocarlosmjr/api-go-personalities/services"
 	"github.com/gorilla/mux"
 	"net/http"
 )
@@ -13,50 +13,41 @@ func Home(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintln(w, "Home Page")
 }
 
-// GetPersonalities Todo: remove access to database this and put in a repository, for example
 func GetPersonalities(w http.ResponseWriter, r *http.Request) {
-	var personalities []models.Personality
-	database.DB.Find(&personalities)
+	personalities := services.GetAllPersonalities()
 	json.NewEncoder(w).Encode(personalities)
 }
 
-// GetPersonalityById todo: remove access to database this and put in a repository, for example
 func GetPersonalityById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	var personality models.Personality
-
-	database.DB.First(&personality, id)
+	personality := services.GetPersonalityById(id)
 	json.NewEncoder(w).Encode(personality)
 }
 
-// CreatePersonality todo: remove access to database this and put in a repository, for example
 func CreatePersonality(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	var newPersonality models.Personality
 	json.NewDecoder(r.Body).Decode(&newPersonality)
-	database.DB.Create(&newPersonality)
+
+	newPersonality = services.CreatePersonality(newPersonality)
 	json.NewEncoder(w).Encode(newPersonality)
 }
 
-// DeletePersonality todo: remove access to database this and put in a repository, for example
 func DeletePersonality(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
-	var personality models.Personality
-
-	database.DB.Delete(&personality, id)
+	services.DeletePersonality(id)
 	json.NewEncoder(w).Encode("Personality deleted")
 }
 
-// UpdatePersonality todo: remove access to database this and put in a repository, for example
 func UpdatePersonality(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id := vars["id"]
 	var personality models.Personality
-
-	database.DB.First(&personality, id)
+	personality = services.GetPersonalityById(id)
 	json.NewDecoder(r.Body).Decode(&personality)
-	database.DB.Save(&personality)
+
+	personality = services.UpdatePersonality(personality)
 	json.NewEncoder(w).Encode(&personality)
 }
