@@ -6,6 +6,6 @@ This project is a simple API using Go, Postgres and Docker.
 
 * to implement layers for code :white_check_mark:
 * to create interface and to put design patters :white_check_mark:
-* to implement unit tests
-* to implement integration tests
-* to implement Swagger in API
+* to implement unit tests :hourglass:
+* to implement integration tests :hourglass:
+* to implement Swagger in API :hourglass:
